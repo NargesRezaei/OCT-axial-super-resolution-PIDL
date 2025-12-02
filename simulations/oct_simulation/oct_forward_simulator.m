@@ -1,3 +1,4 @@
+% OCT A-scan Simulation Program
 clc
 clearvars
 close all
