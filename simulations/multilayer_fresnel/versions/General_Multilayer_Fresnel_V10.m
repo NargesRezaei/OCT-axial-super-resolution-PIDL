@@ -24,8 +24,9 @@ R = zeros(size(lambda));
 Er = zeros(size(lambda));
 Et = zeros(size(lambda));
 
+q = numel(lambda);
 % Step 1: Calculate interface matrices (M2) and propagation angles (theta2)
-[M2, theta2] = transref_V7_vectorized(n, theta_in, p);
+[M2, theta2] = transref_V7_vectorized(n, theta_in, p, q);
 
 % Step 2: Calculate propagation matrices (M1) for each layer
 M1 = prop_V7_vectorized(n, d, lambda, theta2);
@@ -36,7 +37,7 @@ M3 = M3';
 M_M = reshape(M3, 1, []);  % Flatten to 1xN cell array
 
 % Step 4: Cascade matrix multiplication with downsampling
-q = 1000;
+
 M = eye(2);
 M_f{q} = M;
 for k = numel(M_M):-1:1
@@ -63,7 +64,7 @@ end
 
 %======================== SUBFUNCTIONS ========================%
 
-function [M_cell, theta_final] = transref_V7_vectorized(n, theta1, p)
+function [M_cell, theta_final] = transref_V7_vectorized(n, theta1, p, q)
     % VECTORIZED VERSION OF TRANSREF_V7
     % Returns a 1xN cell array where each cell contains a 2x2 transfer matrix
     % Inputs:
@@ -110,7 +111,7 @@ function [M_cell, theta_final] = transref_V7_vectorized(n, theta1, p)
     M_cell = arrayfun(@(r12,r21,t12,t21) (1/t21)*[t12*t21-r12*r21, r21; -r12, 1], ...
                      r12, r21, t12, t21, 'UniformOutput', false);
 
-    M_cell = repmat(M_cell, [1000, 1]);
+    M_cell = repmat(M_cell, [q, 1]);
     % Ensure 1xN cell array shape (important for large N)
     %M_cell = reshape(M_cell, 1, []);
     
