@@ -31,7 +31,7 @@ Llambda_sbw = Bandwidth / d_sbw + 1;
 lambda_sbw  = linspace(lambda_i, lambda_f, Llambda_sbw - mod(Llambda_sbw, 2));
 
 AmpSpectrum = gausswin(length(lambda), 39);    % Amplitude
-width_f     = 2*(lambda_c - test02(lambda, AmpSpectrum));
+width_f     = 2*(lambda_c - FWHM_Cal(lambda, AmpSpectrum));
 dz          = 2*log(2)/pi * lambda_c^2 / width_f; % Axial resolution
 l_c         = dz;
 
@@ -113,8 +113,8 @@ for jj = 107000:num_smpl
     end
 
     % ===================== OCT Simulation =====================
-    [Er, Et, R, T, theta_out]        = General_Multilayer_V7(lambda, [N0, Ni], [z0 Di], theta0, p, AmpSpectrum/sqrt(2));
-    [EtR, ErR, R2, T2, theta_out2]   = General_Multilayer_V7(lambda, [N0, N0], z0, theta0, p, AmpSpectrum/sqrt(2));
+    [Er, Et, R, T, theta_out]        = General_Multilayer_Fresnel_V7(lambda, [N0, Ni], [z0 Di], theta0, p, AmpSpectrum/sqrt(2));
+    [EtR, ErR, R2, T2, theta_out2]   = General_Multilayer_Fresnel_V7(lambda, [N0, N0], z0, theta0, p, AmpSpectrum/sqrt(2));
 
     ErR   = 0.5 .* ErR;
     E_sum = Er + ErR;
