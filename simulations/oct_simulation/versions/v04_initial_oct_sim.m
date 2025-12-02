@@ -116,8 +116,14 @@ else
 end
 
 % ===================== OCT Simulation =====================
-[Er, Et, R, T, theta_out]        = General_Multilayer_V71(lambda, [N0, Ni], [z0 Di], theta0, p, AmpSpectrum/sqrt(2));
-[EtR, ErR, R2, T2, theta_out2]   = General_Multilayer_V71(lambda, [N0, N0], z0, theta0, p, AmpSpectrum/sqrt(2));
+%{
+you can use either General_Multilayer_Fresnel_V71 or General_Multilayer_Fresnel_V7. both of them have same results.
+The main difference is that V7 computes each interface’s angle sequentially (layer by layer), 
+while V71 uses a vectorized, one-shot calculation for all interfaces, 
+which is faster but only strictly equivalent at normal incidence.
+%}
+[Er, Et, R, T, theta_out]        = General_Multilayer_Fresnel_V71(lambda, [N0, Ni], [z0 Di], theta0, p, AmpSpectrum/sqrt(2));
+[EtR, ErR, R2, T2, theta_out2]   = General_Multilayer_Fresnel_V71(lambda, [N0, N0], z0, theta0, p, AmpSpectrum/sqrt(2));
 
 ErR   = 0.5 .* ErR;
 E_sum = Er + ErR;
