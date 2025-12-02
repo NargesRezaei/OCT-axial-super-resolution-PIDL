@@ -149,11 +149,27 @@ end
 Depth = 4*Depth(1:1500)';
 Xaxis = Xaxis(1:1500);
 
-% ===================== Plot =====================
-figure; hold on;
-plot(Xaxis, Depth);
-plot(Xaxis, GT(1:1500));
-xlabel('Z (\mu)', 'FontSize',14);
+%% ======================== Plot =============================================
+figure;
+hold on;
+
+% Plot linear scan
+plot(Xaxis, Depth, 'LineWidth', 1.8);
+
+% Plot ground truth
+plot(Xaxis, GT(1:numel(Xaxis)), '.-.', 'LineWidth', 1.8);
+
+% Labels
+xlabel('Z (\mum)', 'FontSize', 14);
+ylabel('Intensity (a.u.)', 'FontSize', 14);
+
+% Legend
+legend({'A-scan', 'Ground truth'}, ...
+    'FontSize', 12);
+
+grid on;
+box on;
+set(gca, 'FontSize', 12, 'LineWidth', 1);
 
 % ===================== Save Data =====================
 %save([path, 'ML', num2str(jj), '.mat'],'OPL', 'Depth', 'Ni');
