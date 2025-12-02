@@ -31,9 +31,9 @@ Llambda_sbw = Bandwidth / d_sbw + 1;
 lambda_sbw  = linspace(lambda_i, lambda_f, Llambda_sbw - mod(Llambda_sbw, 2));
 
 AmpSpectrum = gausswin(length(lambda), 39);    % Amplitude
-width_f     = 2*(lambda_c - FWHM_Cal(lambda, AmpSpectrum));
-dz          = 2*log(2)/pi * lambda_c^2 / width_f; % Axial resolution
-l_c         = dz;
+% width_f     = 2*(lambda_c - FWHM_Cal(lambda, AmpSpectrum));
+% dz          = 2*log(2)/pi * lambda_c^2 / width_f; % Axial resolution
+% l_c         = dz;
 
 %% ===================== Medium Parameters =====================
 
@@ -73,13 +73,16 @@ N_interface = No_layer + 1;
 for jj = 107000:num_smpl
 
     % ================= Random or Custom Sample =================
-    use_custom_Ni = false; % true: user-defined Ni, false: random
+    use_custom_Ni = true; % true: user-defined Ni, false: random
 
     if use_custom_Ni
         % Example of user-defined refractive indices
-        Ni_user = [1.35, 1.38, 1.32, 1.4, 1.36, 1.39, 1.34, 1.41, 1.37]; % Adjust length = No_layer
+        Ni_user = [1.35, 1.38, 1.2, 1.5, 1.36, 1.39, 1.34, 1.41, 1.37]; % Adjust length = No_layer
         Ni = [N0, Ni_user, N_substrate];
         OPL = linspace(20e-6, 400e-6, N_interface); % Example spacing
+        OPD = [OPL(1), diff(OPL)];
+        Di  = OPD ./ Ni(1:end-1);
+        r12 = refl(Ni);
     else
         % Random sample
         Ni(1) = min_Ni;
@@ -94,6 +97,7 @@ for jj = 107000:num_smpl
             b  = (abs(n2 - Ni(g-1)) < min_step_N);
             Ni(g) = n2 + b * (min_step_N - 2*a*min_step_N);
         end
+        
 
         Ni = [N0, Ni(2:end), N_substrate];
         OPD = [OPL(1), diff(OPL)];
@@ -113,8 +117,8 @@ for jj = 107000:num_smpl
     end
 
     % ===================== OCT Simulation =====================
-    [Er, Et, R, T, theta_out]        = General_Multilayer_Fresnel_V7(lambda, [N0, Ni], [z0 Di], theta0, p, AmpSpectrum/sqrt(2));
-    [EtR, ErR, R2, T2, theta_out2]   = General_Multilayer_Fresnel_V7(lambda, [N0, N0], z0, theta0, p, AmpSpectrum/sqrt(2));
+    [Er, Et, R, T, theta_out]        = General_Multilayer_V71(lambda, [N0, Ni], [z0 Di], theta0, p, AmpSpectrum/sqrt(2));
+    [EtR, ErR, R2, T2, theta_out2]   = General_Multilayer_V71(lambda, [N0, N0], z0, theta0, p, AmpSpectrum/sqrt(2));
 
     ErR   = 0.5 .* ErR;
     E_sum = Er + ErR;
