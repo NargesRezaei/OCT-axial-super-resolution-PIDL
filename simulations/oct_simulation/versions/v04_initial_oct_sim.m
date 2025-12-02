@@ -1,5 +1,5 @@
 %%
-% OCT Simulation Program
+% OCT A-scan Simulation Program
 % Author: NR
 % Version: nn
 % Date: 01/11/03
@@ -8,7 +8,7 @@ clc;
 clearvars; 
 close all;
 
-%% ===================== Constants =====================
+%% ===================== Constants =============================
 
 theta0   = 0;
 p        = 'p';
@@ -35,7 +35,7 @@ AmpSpectrum = gausswin(length(lambda), 39);    % Amplitude
 % dz          = 2*log(2)/pi * lambda_c^2 / width_f; % Axial resolution
 % l_c         = dz;
 
-%% ===================== Medium Parameters =====================
+%% ===================== Medium Parameters ======================
 
 N0           = 1;
 min_Ni       = 1.3;
@@ -49,7 +49,7 @@ min_OPL      = 50e-6;
 D_OPL        = 500e-6;
 min_step_OPL = 10e-6;
 
-%% ===================== SBW Definition =====================
+%% ===================== SBW Definition =========================
 
 sbw_Window    = linspace(-d_sbw, (length(lambda)+2*d_convert)/10, length(lambda)+2*d_convert);
 sbw_convertor = zeros(fix(numel(lambda)/d_convert), length(sbw_Window));
@@ -70,91 +70,89 @@ path = ['D:\Narges\DL-MultilayerOCT\Data\10Mm\', num2str(kk), '_3_no1stlayerlimi
 No_layer = kk;
 N_interface = No_layer + 1;
 
-for jj = 107000:num_smpl
+%for jj = 1:num_smpl
+% ================= Random or Custom Sample ====================
+use_custom_Ni = true; % true: user-defined Ni, false: random
 
-    % ================= Random or Custom Sample =================
-    use_custom_Ni = true; % true: user-defined Ni, false: random
+if use_custom_Ni
+    % Example of user-defined refractive indices
+    Ni_user = [1.35, 1.38, 1.2, 1.5, 1.36, 1.39, 1.34, 1.41, 1.37]; % Adjust length = No_layer
+    Ni = [N0, Ni_user, N_substrate];
+    OPL = linspace(20e-6, 400e-6, N_interface); % Example spacing
+    OPD = [OPL(1), diff(OPL)];
+    Di  = OPD ./ Ni(1:end-1);
+    r12 = refl(Ni);
+else
+    % Random sample
+    Ni(1) = min_Ni;
+    OPL(1) = rand(1)*400e-6 + 15e-6;
 
-    if use_custom_Ni
-        % Example of user-defined refractive indices
-        Ni_user = [1.35, 1.38, 1.2, 1.5, 1.36, 1.39, 1.34, 1.41, 1.37]; % Adjust length = No_layer
-        Ni = [N0, Ni_user, N_substrate];
-        OPL = linspace(20e-6, 400e-6, N_interface); % Example spacing
-        OPD = [OPL(1), diff(OPL)];
-        Di  = OPD ./ Ni(1:end-1);
-        r12 = refl(Ni);
-    else
-        % Random sample
-        Ni(1) = min_Ni;
-        OPL(1) = rand(1)*400e-6 + 15e-6;
+    for g = 2:N_interface
+        a = randab(min_step_OPL, (D_OPL - OPL(g-1) - (N_interface - g) * min_step_OPL));
+        OPL(g) = OPL(g-1) + a;
 
-        for g = 2:N_interface
-            a = randab(min_step_OPL, (D_OPL - OPL(g-1) - (N_interface - g) * min_step_OPL));
-            OPL(g) = OPL(g-1) + a;
-
-            n2 = randab(min_Ni, max_Ni - 2*min_step_N);
-            a  = (Ni(g-1) > mean([min_Ni, max_Ni]));
-            b  = (abs(n2 - Ni(g-1)) < min_step_N);
-            Ni(g) = n2 + b * (min_step_N - 2*a*min_step_N);
-        end
-        
-
-        Ni = [N0, Ni(2:end), N_substrate];
-        OPD = [OPL(1), diff(OPL)];
-        Di  = OPD ./ Ni(1:end-1);
-
-        % Shuffle layers
-        s = randperm(No_layer) + 1;
-        Ni(2:end-1) = Ni(s);
-        Di(2:end)   = Di(s);
-        OPD = Ni(1:end-1) .* Di;
-        r12 = refl(Ni);
-
-        OPL = OPD;
-        for g = N_interface:-1:2
-            OPL(g) = OPL(g) + sum(OPL(1:g-1));
-        end
+        n2 = randab(min_Ni, max_Ni - 2*min_step_N);
+        a  = (Ni(g-1) > mean([min_Ni, max_Ni]));
+        b  = (abs(n2 - Ni(g-1)) < min_step_N);
+        Ni(g) = n2 + b * (min_step_N - 2*a*min_step_N);
     end
+    
 
-    % ===================== OCT Simulation =====================
-    [Er, Et, R, T, theta_out]        = General_Multilayer_V71(lambda, [N0, Ni], [z0 Di], theta0, p, AmpSpectrum/sqrt(2));
-    [EtR, ErR, R2, T2, theta_out2]   = General_Multilayer_V71(lambda, [N0, N0], z0, theta0, p, AmpSpectrum/sqrt(2));
+    Ni = [N0, Ni(2:end), N_substrate];
+    OPD = [OPL(1), diff(OPL)];
+    Di  = OPD ./ Ni(1:end-1);
 
-    ErR   = 0.5 .* ErR;
-    E_sum = Er + ErR;
-    I_OCT2 = smooth(0.5 * (E_sum .* conj(E_sum)));
+    % Shuffle layers
+    s = randperm(No_layer) + 1;
+    Ni(2:end-1) = Ni(s);
+    Di(2:end)   = Di(s);
+    OPD = Ni(1:end-1) .* Di;
+    r12 = refl(Ni);
 
-    p1     = [zeros(1,d_convert), I_OCT2', zeros(1,d_convert)];
-    I_OCT3 = (sbw_convertor * p1') / d_convert;
-
-    ref2   = 0.5*(Er.*conj(Er) + ErR.*conj(ErR));
-    p1     = [zeros(1,d_convert), ref2, zeros(1,d_convert)];
-    ref3   = (sbw_convertor * p1') / d_convert;
-
-    [Xaxis, Depth] = OCT_Analyse(I_OCT3, ref3, lambda_sbw , Di);
-    Xaxis = round(Xaxis', 7);
-
-    % ===================== Ground Truth =====================
-    GT = zeros(numel(Xaxis),1);
-    for ii = 1:numel(OPL)
-        [~, h] = min(abs(Xaxis - OPL(ii)));
-        GT(h, 1) = max(Gz) * r12(ii);
+    OPL = OPD;
+    for g = N_interface:-1:2
+        OPL(g) = OPL(g) + sum(OPL(1:g-1));
     end
-
-    Depth = 4*Depth(1:1500)';
-    Xaxis = Xaxis(1:1500);
-
-    % ===================== Plot =====================
-    figure; hold on;
-    plot(Xaxis, Depth);
-    plot(Xaxis, GT(1:1500));
-    xlabel('Z (\mu)', 'FontSize',14);
-
-    % ===================== Save Data =====================
-    save([path, 'ML', num2str(jj), '.mat'],'OPL', 'Depth', 'Ni');
-
-    Ni = 0; % Reset Ni
 end
+
+% ===================== OCT Simulation =====================
+[Er, Et, R, T, theta_out]        = General_Multilayer_V71(lambda, [N0, Ni], [z0 Di], theta0, p, AmpSpectrum/sqrt(2));
+[EtR, ErR, R2, T2, theta_out2]   = General_Multilayer_V71(lambda, [N0, N0], z0, theta0, p, AmpSpectrum/sqrt(2));
+
+ErR   = 0.5 .* ErR;
+E_sum = Er + ErR;
+I_OCT2 = smooth(0.5 * (E_sum .* conj(E_sum)));
+
+p1     = [zeros(1,d_convert), I_OCT2', zeros(1,d_convert)];
+I_OCT3 = (sbw_convertor * p1') / d_convert;
+
+ref2   = 0.5*(Er.*conj(Er) + ErR.*conj(ErR));
+p1     = [zeros(1,d_convert), ref2, zeros(1,d_convert)];
+ref3   = (sbw_convertor * p1') / d_convert;
+
+[Xaxis, Depth] = OCT_Analyse(I_OCT3, ref3, lambda_sbw , Di);
+Xaxis = round(Xaxis', 7);
+
+% ===================== Ground Truth =====================
+GT = zeros(numel(Xaxis),1);
+for ii = 1:numel(OPL)
+    [~, h] = min(abs(Xaxis - OPL(ii)));
+    GT(h, 1) = max(Gz) * r12(ii);
+end
+
+Depth = 4*Depth(1:1500)';
+Xaxis = Xaxis(1:1500);
+
+% ===================== Plot =====================
+figure; hold on;
+plot(Xaxis, Depth);
+plot(Xaxis, GT(1:1500));
+xlabel('Z (\mu)', 'FontSize',14);
+
+% ===================== Save Data =====================
+%save([path, 'ML', num2str(jj), '.mat'],'OPL', 'Depth', 'Ni');
+Ni = 0; % Reset Ni
+% end
 
 % Save Xaxis
 % T = table(Xaxis, 'VariableNames',{'Xaxis'});
