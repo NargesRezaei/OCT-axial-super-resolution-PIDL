@@ -46,7 +46,8 @@ Only the main physical steps are described here; low-level implementation detail
 This folder contains both:
 1. The **final multilayer Fresnel model** (computes reflection profile of sample)
 2. The **final OCT forward simulator** (generates the A-scan using that profile)
-
+   
+```
 simulations/
 │
 ├── multilayer_fresnel/
@@ -71,7 +72,7 @@ simulations/
 │       └── ...                (more OCT development versions)
 │
 └── README.md                  ← Main README for Part 1 (the long text you wrote)
-
+```
 ---
 
 ## Main scripts (final versions)
