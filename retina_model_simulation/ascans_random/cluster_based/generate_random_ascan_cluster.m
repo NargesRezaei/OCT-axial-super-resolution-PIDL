@@ -248,7 +248,7 @@ for jj = 1 : num_smpl
     LN = [LN, N_1(end)];
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sample Arm reflection
-    [Er, ~, ~, ~, ~] = General_Multilayer_V11(lambda, [N0, LN],  [z0_S  LD], theta0, pol, AmpSpectrum/sqrt(2));
+    [Er, ~, ~, ~, ~] = General_Multilayer_Fresnel_V11(lambda, [N0, LN],  [z0_S  LD], theta0, pol, AmpSpectrum/sqrt(2));
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Spectral Interferogram
     E_sum = Er +  ErR;
