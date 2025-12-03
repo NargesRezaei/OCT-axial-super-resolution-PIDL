@@ -49,7 +49,7 @@ sigma       = FWHM / (2*sqrt(2*log(2)));
 AmpSpectrum = exp( -((lambda - lambda_c).^2) / (2 * sigma^2) );
 AmpSpectrum = AmpSpectrum/max(AmpSpectrum);
 
-width_f     = 2*(lambda_c - test02(lambda, AmpSpectrum));
+width_f     = 2*(lambda_c - FWHM_Cal(lambda, AmpSpectrum));
 dz          = 2 * log(2)/pi* lambda_c^2/width_f; % axial resolution of OCT
 l_c         = dz;
 
