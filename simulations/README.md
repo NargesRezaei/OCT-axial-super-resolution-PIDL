@@ -58,7 +58,7 @@ simulations/
 │   └── versions/
 │       ├── General_Multilayer_Fresnel_V7.m
 │       ├── General_Multilayer_Fresnel_V71.m
-│       ├── General_Multilayer_Fresnel_V10.m
+│       └── General_Multilayer_Fresnel_V10.m
 │
 ├── oct_simulation/
 │   ├── oct_forward_simulator.m
@@ -66,7 +66,11 @@ simulations/
 │   ├── OCT_Analyse.m         
 │   ├── README.md             
 │   └── versions/
-│       ├── oct_forward_simulator_v02.m
+│       └── oct_forward_simulator_v02.m
+│
+├── sample_outputs/
+│   ├── A_Scan.png    
+│   └── spectral_interferogram.png 
                
 ```
 ---
@@ -136,6 +140,15 @@ oct_forward_simulator
 ```
 
 This script generates the interferometric signal and reconstructs the final A-scan.
+
+---
+## Example output
+
+Below is an example of a synthetic OCT A-scan and its spectral interferogram generated using the multilayer Fresnel model and the OCT forward simulator (a random sample):
+
+| Spectral Interferogram profile | Reconstructed A-scan |
+|--------------------------------|----------------------|
+| ![](sample_outputs/spectral_interferogram.png) | ![](sample_outputs/A_scan.png) |
 
 ---
 
