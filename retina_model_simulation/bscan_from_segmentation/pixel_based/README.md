@@ -59,7 +59,7 @@ Finally, reconstruction is done using:
 
 - ` [Xaxis, Depth] = OCT_Analyse(I_OCT3, ref3, lambda_sbw , LD);`
 
-Each reconstructed A-scan (`Depth`) is truncated to the first 200 depth samples and stacked into the B-scan matrix:
+Each reconstructed A-scan (`Depth`) is stacked into the B-scan matrix:
 
 - `B_Depth(:, jj)`
 
