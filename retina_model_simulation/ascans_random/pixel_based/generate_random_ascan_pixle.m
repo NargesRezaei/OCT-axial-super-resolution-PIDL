@@ -61,7 +61,7 @@ for kk = 1 : fix((numel(lambda))/d_convert)
     sbw_convertor(kk,:) = exp(-(sbw_Window-sbw_Window(d_convert*kk+1)).^2./(2 * 0.09^2));
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Reference arm
-[EtR, ErR, R2, T2, theta_out2] = General_Multilayer_V10(lambda, [N0, N0], z0, theta0, pol, AmpSpectrum/sqrt(2));
+[EtR, ErR, R2, T2, theta_out2] = General_Multilayer_Fresnel_V10(lambda, [N0, N0], z0, theta0, pol, AmpSpectrum/sqrt(2));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Sample arm
 pxl_ranges = round(Depth_ranges / pixel_size);
@@ -134,7 +134,7 @@ for jj = 1 : num_smpl
     LN = [LN, N_1(end)];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Spectral Interferogram
-    [Er, Et, R, T, theta_out] = General_Multilayer_V10(lambda, [N0, LN],  [z0  LD], theta0, pol, AmpSpectrum/sqrt(2));
+    [Er, Et, R, T, theta_out] = General_Multilayer_Fresnel_V10(lambda, [N0, LN],  [z0  LD], theta0, pol, AmpSpectrum/sqrt(2));
     ErR_2                     = .5 .* ErR;
     E_sum                     = Er +  ErR_2;
     I_OCT2                    = smooth(1/2*(E_sum .* conj(E_sum)));
