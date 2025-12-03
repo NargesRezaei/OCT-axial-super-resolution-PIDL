@@ -67,8 +67,7 @@ simulations/
 │   ├── README.md             
 │   └── versions/
 │       ├── oct_forward_simulator_v02.m
-│
-└── README.md                  
+               
 ```
 ---
 
