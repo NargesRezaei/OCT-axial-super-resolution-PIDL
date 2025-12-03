@@ -32,7 +32,22 @@ They call the core functions from the main simulation modules, for example:
 
 Make sure the `simulations/` folder is on the MATLAB path before running:
 
-```matlab
+```
 addpath('../../simulations');
 addpath('../../simulations/multilayer_fresnel');
 addpath('../../simulations/oct_simulation');
+```
+
+---
+### Recommended usage
+
+**Use the *cluster-based model* when you want:**
+- Layer-specific structure
+- Random clusters and bright spots
+- More realistic retinal texture along depth
+
+**Use the *pixel-based model* for:**
+- Reproducing older experiments
+- Comparing with the original, simpler random model
+- Cases where per-pixel randomness is preferred
+
