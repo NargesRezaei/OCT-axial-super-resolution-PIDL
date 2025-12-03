@@ -1,7 +1,7 @@
 # OCT A-scan Simulation Module
 
 This folder contains the OCT forward model used to convert the multilayer Fresnel reflection spectrum into a physically consistent OCT A-scan.  
-The two included simulators share the **same central wavelength and spectral bandwidth**, so they produce **the same theoretical axial resolution**, but differ in numerical detail and sampling density.
+The two simulators use different spectral bandwidths and sampling densities, which makes one of them **more accurate** and **higher-resolution** than the other.
 
 ---
 
