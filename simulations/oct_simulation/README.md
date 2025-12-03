@@ -1,58 +1,49 @@
 # OCT A-scan Simulation Module
 
 This folder contains the OCT forward model used to convert the multilayer Fresnel reflection spectrum into a physically consistent OCT A-scan.  
-It includes two OCT simulators with different levels of spectral sampling, a clean reference-arm model, and an FFT-based reconstruction module.
+The two included simulators share the **same central wavelength and spectral bandwidth**, so they produce **the same theoretical axial resolution**, but differ in numerical detail and sampling density.
 
 ---
 
 ## Folder structure
 
-Files in this folder:
 ```
 oct_simulation/
 │
-├── oct_forward_simulator.m          # Main OCT simulator (current version)
+├── oct_forward_simulator.m          # Main OCT simulator (efficient, dataset-friendly)
 ├── Reference_Mirror.m               # Clean physical model of the reference arm
-├── OCT_Analyse.m                    # FFT-based reconstruction to A-scan
+├── OCT_Analyse.m                    # FFT-based reconstruction
 ├── README.md                        # This file
 └── versions/
-    ├── oct_forward_simulator_v02.m  # Older / baseline simulator
+    ├── oct_forward_simulator_v02.m  # Higher-detail, heavier version
 ```
+
 ---
 
 ## 1. OCT A-scan simulation scripts
 
-Two OCT forward simulators are provided, differing in spectral detail and computational cost.
-
 ### Script 1 – OCT A-scan simulator  
 *(oct_forward_simulator.m – main script)*
 
-- Uses a moderate spectral bandwidth and fewer wavelength samples.  
-- Uses a simpler source and spectrometer model.  
-- Designed as a **clean, easy-to-follow implementation** for testing:
-  - The multilayer Fresnel model
-  - The OCT data pipeline end-to-end  
-- Faster and lighter to run:
-  - Good for debugging
-  - Good for generating quick example A-scans  
+- Efficient and clean implementation  
+- Moderate number of wavelength samples  
+- Stable and suitable for:
+  - Dataset generation  
+  - Debugging  
+  - Most standard experiments  
 
-> **Summary:** Baseline, simple, and lightweight.
+> **Balanced choice:** fast, reliable, and accurate for large-scale simulation.
 
 ---
 
-### Script 2 – High-resolution wide-band OCT simulator  
-*(oct_forward_simulator_v02.m, in `versions/`)*
+### Script 2 – High-detail OCT simulator  
+*(oct_forward_simulator_v02.m — in `versions/`)*
 
-- Uses a **wider spectral bandwidth**.  
-- Uses **more wavelength samples**, leading to:
-  - Denser sampling in the spectrum
-  - **Higher axial resolution** in the A-scan  
-- Employs an updated OCT and SBW modelling approach:
-  - More realistic source and spectrometer behaviour
-  - Better suited for **fine-scale, realistic simulations**  
-- Computationally heavier, but more accurate and detailed.
+- Uses **denser spectral sampling** over the same bandwidth  
+- Produces smoother interferograms and slightly more accurate spectral structure  
+- Computation time is noticeably higher  
 
-> **Summary:** More wavelengths + wider spectrum → **higher resolution and more realism**, at higher computational cost.
+> **Best for:** validation and precision-focused experiments.
 
 ---
 
@@ -85,6 +76,7 @@ Previously, the reference arm was approximated as a fake two-layer multilayer st
 
 > **In short:** `Reference_Mirror` provides a clean, physically consistent reference-arm model that replaces the previous “fake [N0, N0] multilayer” construction.
 
+
 ---
 
 ## 3. Spectral processing and FFT – `OCT_Analyse.m`
@@ -113,20 +105,24 @@ It performs:
      - FFT scaling  
 
 > **Output:** A calibrated A-scan and `Zaxis` that can be directly plotted or used as input for dataset generation and deep learning.
-
 ---
 
 ## Recommended usage
 
-- Use `oct_forward_simulator.m` for:
-  - High-resolution simulations  
-  - Generating high-quality ground-truth A-scans  
-  - Realistic OCT signal modelling  
+- **Use `oct_forward_simulator.m`** for most applications:  
+  - Dataset generation  
+  - Training pipelines  
+  - Large-scale simulations  
+  - General OCT modelling  
 
-- Use `oct_forward_simulator_v02.m` (in `versions/`) for:
-  - Quick tests  
-  - Debugging the Fresnel module  
-  - Lightweight experiments when speed matters more than ultimate resolution  
+  It is **computationally efficient** while preserving the same axial resolution as the high-detail version.
 
-`Reference_Mirror.m` and `OCT_Analyse.m` are shared components used by both simulators to ensure a consistent, physically meaningful OCT forward model.
+---
+
+- **Use `oct_forward_simulator_v02.m`** only when:
+  - You need maximum spectral fidelity  
+  - You are performing validation or numerical accuracy checks  
+
+  It samples the same bandwidth more densely, giving slightly more detailed interferograms at the cost of speed.
+
 
