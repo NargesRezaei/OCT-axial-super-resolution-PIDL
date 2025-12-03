@@ -3,6 +3,7 @@ clc
 clearvars
 close all
 
+
 %% ===================== Constants ===========================
 theta0       = 0;
 pol          = 'p';
@@ -73,6 +74,8 @@ Gz = fftshift(fft(AmpSpectrum))/(numel(AmpSpectrum));
 ErR = Reference_Mirror(lambda, N0, z0_R, theta0, pol, AmpSpectrum, 'ideal', Ref_scale_f);
 
 %% ======================== Sample Arm =============================
+
+
 for kk = 9
     path        = ['D:\Narges\DL-MultilayerOCT\Data\10Mm\', num2str(kk), '_3_no1stlayerlimit\'];
     No_layer    = kk;
@@ -83,40 +86,61 @@ for kk = 9
     OPD = [1 1];
     r12 = [1 1];
 
-    Ni(1) = min_Ni;
-    OPL(1) = rand(1)*400e-6 + 15e-6;
-    for g = 2 : N_interface
-        a      = randab(min_step_OPL, (D_OPL - OPL(g-1) - (N_interface - g) * min_step_OPL));
-        OPL(g) = OPL(g-1) + a;
+    % ================= Random or Custom Sample ====================
+    use_custom_Ni = true; % true: user-defined Ni, false: random
 
-        n2 = randab(min_Ni, max_Ni - 2*min_step_N);
-        a  = (Ni(g-1) > mean([min_Ni, max_Ni]));
-        b  = (abs(n2 - Ni(g-1)) < min_step_N);
-        Ni(g) = n2 + b * (min_step_N - 2*a*min_step_N);
-    end
+    if use_custom_Ni
+        % Example of user-defined refractive indices
+        Ni_user = [1.35, 1.38, 1.2, 1.5, 1.36, 1.39, 1.34, 1.41, 1.37]; % Adjust length = No_layer
+        Ni = [N0, Ni_user, N_substrate];
+        OPL = linspace(20e-6, 400e-6, N_interface); % Example spacing
+        OPD = [OPL(1), diff(OPL)];
+        Di  = OPD ./ Ni(1:end-1);
+        r12 = refl(Ni);
+    else
+        % Random sample
+        Ni(1) = min_Ni;
+        OPL(1) = rand(1)*400e-6 + 15e-6;
 
-    Ni          = [N0 Ni(2:end), N_substrate];
-    OPD         = [OPL(1) OPL(2:end) - OPL(1:end-1)];
-    Di          = OPD ./ Ni(1:end-1);
-    s           = randperm(No_layer)+1;
-    Ni(2:end-1) = Ni(s);
-    Di(2:end)   = Di(s);
-    OPD         = Ni(1:end-1).*Di;
-    r12         = refl(Ni);
+        for g = 2:N_interface
+            a = randab(min_step_OPL, (D_OPL - OPL(g-1) - (N_interface - g) * min_step_OPL));
+            OPL(g) = OPL(g-1) + a;
 
-    OPL = OPD;
-    for g = N_interface :-1: 2
-        OPL(g) = OPL(g) + sum(OPL(1:g-1));
+            n2 = randab(min_Ni, max_Ni - 2*min_step_N);
+            a  = (Ni(g-1) > mean([min_Ni, max_Ni]));
+            b  = (abs(n2 - Ni(g-1)) < min_step_N);
+            Ni(g) = n2 + b * (min_step_N - 2*a*min_step_N);
+        end
+
+        Ni(1) = min_Ni;
+        OPL(1) = rand(1)*400e-6 + 15e-6;
+        for g = 2 : N_interface
+            a      = randab(min_step_OPL, (D_OPL - OPL(g-1) - (N_interface - g) * min_step_OPL));
+            OPL(g) = OPL(g-1) + a;
+
+            n2 = randab(min_Ni, max_Ni - 2*min_step_N);
+            a  = (Ni(g-1) > mean([min_Ni, max_Ni]));
+            b  = (abs(n2 - Ni(g-1)) < min_step_N);
+            Ni(g) = n2 + b * (min_step_N - 2*a*min_step_N);
+        end
+
+        Ni          = [N0 Ni(2:end), N_substrate];
+        OPD         = [OPL(1) OPL(2:end) - OPL(1:end-1)];
+        Di          = OPD ./ Ni(1:end-1);
+        s           = randperm(No_layer)+1;
+        Ni(2:end-1) = Ni(s);
+        Di(2:end)   = Di(s);
+        OPD         = Ni(1:end-1).*Di;
+        r12         = refl(Ni);
+
+        OPL = OPD;
+        for g = N_interface :-1: 2
+            OPL(g) = OPL(g) + sum(OPL(1:g-1));
+        end
     end
 
     %% ======================== Spectral Interferogram =============================
-    %{
-    you can use either General_Multilayer_Fresnel_V11 or General_Multilayer_Fresnel_V10. 
-    V11 uses clean fully-vectorized 3D/4D matrix operations (pagemtimes) over all wavelengths, 
-    while V10 relies on cell arrays and index tricks, 
-    making it more complex and slower.
-    %}
-    [Er, ~, ~, ~, ~] = General_Multilayer_Fresnel_V11(lambda, [N0, Ni],  [z0_S  Di], theta0, pol, AmpSpectrum/sqrt(2));
+    [Er, ~, ~, ~, ~] = General_Multilayer_V11(lambda, [N0, Ni],  [z0_S  Di], theta0, pol, AmpSpectrum/sqrt(2));
     E_sum = Er +  ErR;
     I_OCT2 = 1/2 * (E_sum .* conj(E_sum));
 
