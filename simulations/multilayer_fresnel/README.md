@@ -16,7 +16,7 @@ multilayer_fresnel/
 ├── General_Multilayer_Fresnel_V11.m     # Final multilayer Fresnel implementation
 ├── transfer_V7_vectorized.m             # Vectorized interface matrices (helper)
 ├── prop_V7_vectorized_fullspec.m        # Vectorized propagation matrices (helper)
-├── README.md                            # This file
+├── README.md                            
 └── versions/
     ├── General_Multilayer_Fresnel_V7.m  # Baseline loop-based version
     ├── General_Multilayer_Fresnel_V71.m # Partially vectorized version
