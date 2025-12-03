@@ -39,7 +39,8 @@ addpath('../../simulations/oct_simulation');
 ```
 
 ---
-### Recommended usage
+
+## Recommended usage
 
 **Use the *cluster-based model* when you want:**
 - Layer-specific structure
