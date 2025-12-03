@@ -13,7 +13,7 @@ Earlier versions (V7, V71, V10) are preserved in the `versions/` folder to docum
 ```
 multilayer_fresnel/
 │
-├── General_Multilayer_Fresnel_V11.m      # Final multilayer Fresnel implementation
+├── General_Multilayer_Fresnel_V11.m     # Final multilayer Fresnel implementation
 ├── transfer_V7_vectorized.m             # Vectorized interface matrices (helper)
 ├── prop_V7_vectorized_fullspec.m        # Vectorized propagation matrices (helper)
 ├── README.md                            # This file
@@ -131,5 +131,4 @@ Use **V7, V71, V10** only if:
 - You need to reproduce older results, or
 - You want to study the evolution toward a fully vectorized implementation.
 
----
 ---
