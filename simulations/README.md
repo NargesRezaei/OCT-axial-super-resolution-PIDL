@@ -51,34 +51,31 @@ This folder contains both:
 simulations/
 │
 ├── multilayer_fresnel/
-│   ├── fresnel_multilayer_final.m
-│   ├── fresnel_coeffs.m
-│   ├── build_reflection_profile.m
-│   ├── phase_delay.m          (optional – only if used)
-│   ├── README.md              (short description of the Fresnel model)
+│   ├── General_Multilayer_Fresnel_V11.m
+│   ├── prop_V7_vectorized_fullspec.m
+│   ├── transfer_V7_vectorized.m
+│   ├── README.md           
 │   └── versions/
-│       ├── v1_basic_fresnel/
-│       ├── v2_polarization/
-│       ├── v3_multilayer_system/
-│       └── ...                (any additional development versions)
+│       ├── General_Multilayer_Fresnel_V7.m
+│       ├── General_Multilayer_Fresnel_V71.m
+│       ├── General_Multilayer_Fresnel_V10.m
 │
 ├── oct_simulation/
 │   ├── oct_forward_simulator.m
-│   ├── interferogram_generator.m
-│   ├── oct_utils.m            (optional)
-│   ├── README.md              (short description of the OCT simulation part)
+│   ├── Reference_Mirror.m
+│   ├── OCT_Analyse.m         
+│   ├── README.md             
 │   └── versions/
-│       ├── v4_initial_oct_sim/
-│       └── ...                (more OCT development versions)
+│       ├── oct_forward_simulator_v02.m
 │
-└── README.md                  ← Main README for Part 1 (the long text you wrote)
+└── README.md                  
 ```
 ---
 
 ## Main scripts (final versions)
 
 ### **Multilayer Fresnel Model**  
-`multilayer_fresnel/fresnel_multilayer_final.m`  
+`multilayer_fresnel/General_Multilayer_Fresnel_V11.m`  
 - Computes Fresnel reflection/transmission coefficients.  
 - Handles multilayer propagation and multiple reflections.  
 - Produces the **reflection spectrum/profile** used by the OCT simulator.
@@ -97,13 +94,12 @@ simulations/
 Each subsystem has a `versions/` folder:
 
 ### In `multilayer_fresnel/versions/`
-- `v1_basic_fresnel/` – Single-interface Fresnel  
-- `v2_polarization/` – Adds s/p polarization  
-- `v3_multilayer_system/` – Full multilayer stack model  
-- (More versions may be added)
+- `General_Multilayer_Fresnel_V7/`  – fully loop-based  
+- `General_Multilayer_Fresnel_V71/` – vectorized interfaces but still loop per wavelength 
+- `General_Multilayer_Fresnel_V10/` – multi-wavelength using cell arrays and index tricks  
 
 ### In `oct_simulation/versions/`
-- `v4_initial_oct_sim/` – First OCT forward-simulation prototype  
+- `oct_forward_simulator_v02/` – First OCT forward-simulation prototype  
 - (More versions may be added)
 
 Each version has a short README describing what changed.
