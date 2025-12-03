@@ -19,7 +19,7 @@ sample_type = "Normal";
 save_path = "D:\Narges\DL-MultilayerOCT\Data\Retina_Simulation_V03_040820\"+sample_type+"\";
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% medium parameters
 % N & OPL
-% Layer names:    BG   RNFL   GCL    IPL   INL    OPL    ONL    ELM    IS     ISOSJ  OS     RPE    BG
+% Layer names:    BG   RNFL   GCL    IPL   INL    OPL    ONL    ELM    IS     IS/OSJ OS     RPE    BG
 N_1            = [N0   1.38,  1.37,  1.374 1.376, 1.39,  1.398, 1.41,  1.425, 1.405, 1.395, 1.38   N0];
 DN_cluster     = [0    0.1    0.02   0.015 0.005  0.02   0.003  0.01   0.003  0.2    0.008  0.2    0];
 dn_all         = [0    0.03,  0.015, 0.012 0.001  0.015, 0.008, 0.005, 0.01,  0.03,  0.02,  0.03   0];
