@@ -148,7 +148,7 @@ Below is an example of a synthetic OCT A-scan and its spectral interferogram gen
 
 | Spectral Interferogram profile | Reconstructed A-scan |
 |--------------------------------|----------------------|
-| ![](sample_outputs/spectral_interferogram.png) | ![](sample_outputs/A_scan.png) |
+| ![](sample_outputs/spectral_interferogram.png) | ![](sample_outputs/A_Scan.png) |
 
 ---
 
