@@ -1,3 +1,4 @@
+% Generate random A-scan of retina
 clc
 clearvars
 close all
