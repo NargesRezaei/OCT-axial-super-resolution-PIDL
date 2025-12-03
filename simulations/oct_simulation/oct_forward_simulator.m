@@ -171,10 +171,10 @@ for kk = 9
     hold on;
 
     % Plot linear scan
-    plot(Xaxis, Depth, 'LineWidth', 1.8);
+    plot(Xaxis*1e6, Depth, 'LineWidth', 1.8);
 
     % Plot ground truth
-    plot(Xaxis, GT(1:numel(Xaxis)), '.-.', 'LineWidth', 1.8);
+    plot(Xaxis*1e6, GT(1:numel(Xaxis)), '.-.', 'LineWidth', 1.8);
 
     % Labels
     xlabel('Z (\mum)', 'FontSize', 14);
