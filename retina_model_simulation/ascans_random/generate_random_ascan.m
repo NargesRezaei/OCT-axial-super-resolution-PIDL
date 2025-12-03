@@ -1,4 +1,4 @@
-% Generate random A-scan of retina
+% Generating random A-scan of retina
 clc
 clearvars
 close all
@@ -12,8 +12,8 @@ num_smpl     = 100000;
 n_pixel_size = 1e-6;
 N0           = 1.33;
 z0_R         = 5e-6;
-z0_S         = 70e-6;
-Ref_scale_f  = .5;
+z0_S         = 0;
+Ref_scale_f  = 0;
 
 sample_type = "Normal";
 save_path = "D:\Narges\DL-MultilayerOCT\Data\Retina_Simulation_V03_040820\"+sample_type+"\";
