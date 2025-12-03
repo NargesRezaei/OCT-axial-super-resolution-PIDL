@@ -18,12 +18,12 @@ retina_model_simulation/
 │
 ├── ascans_random/
 │   ├── cluster_based/   # Anatomically inspired cluster model for A-scans
-│   └── pixel_based/     # Simpler per-pixel random A-scan model
+│   ├── pixel_based/     # Simpler per-pixel random A-scan model
 │   └── README.md
 │
 ├── bscan_simulation/
 │   ├── cluster_based/   # B-scans with intra-layer clusters and bright spots
-│   └── pixel_based/     # B-scans with per-pixel random refractive index
+│   ├── pixel_based/     # B-scans with per-pixel random refractive index
 │   └── README.md
 │
 ├── sample_outputs/        
