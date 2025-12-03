@@ -110,7 +110,13 @@ for kk = 9
     end
 
     %% ======================== Spectral Interferogram =============================
-    [Er, ~, ~, ~, ~] = General_Multilayer_V11(lambda, [N0, Ni],  [z0_S  Di], theta0, pol, AmpSpectrum/sqrt(2));
+    %{
+    you can use either General_Multilayer_Fresnel_V11 or General_Multilayer_Fresnel_V10. 
+    V11 uses clean fully-vectorized 3D/4D matrix operations (pagemtimes) over all wavelengths, 
+    while V10 relies on cell arrays and index tricks, 
+    making it more complex and slower.
+    %}
+    [Er, ~, ~, ~, ~] = General_Multilayer_Fresnel_V11(lambda, [N0, Ni],  [z0_S  Di], theta0, pol, AmpSpectrum/sqrt(2));
     E_sum = Er +  ErR;
     I_OCT2 = 1/2 * (E_sum .* conj(E_sum));
 
