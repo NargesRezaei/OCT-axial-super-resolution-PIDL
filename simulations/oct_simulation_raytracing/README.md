@@ -8,7 +8,7 @@ The two simulators use different spectral bandwidths and sampling densities, whi
 ## Folder structure
 
 ```
-oct_simulation/
+oct_simulation_raytracing/
 │
 ├── oct_forward_simulator.m          # Main OCT simulator (efficient, dataset-friendly)
 ├── Reference_Mirror.m               # Clean physical model of the reference arm
