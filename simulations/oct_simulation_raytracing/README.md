@@ -1,4 +1,4 @@
-# OCT A-scan Simulation Module
+# OCT A-scan Simulation Module Based on Ray Tracing Matrix 
 
 This folder contains the OCT forward model used to convert the multilayer Fresnel reflection spectrum into a physically consistent OCT A-scan.  
 The two simulators use different spectral bandwidths and sampling densities, which makes one of them **more accurate** and **higher-resolution** than the other.
