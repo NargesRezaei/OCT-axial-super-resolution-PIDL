@@ -60,7 +60,7 @@ simulations/
 │       ├── General_Multilayer_Fresnel_V71.m
 │       └── General_Multilayer_Fresnel_V10.m
 │
-├── oct_simulation/
+├── oct_simulation_raytracing/
 │   ├── oct_forward_simulator.m
 │   ├── Reference_Mirror.m
 │   ├── OCT_Analyse.m         
